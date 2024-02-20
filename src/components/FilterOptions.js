@@ -1,5 +1,5 @@
 // FilterOptions.js
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const FilterContainer = styled.div`
@@ -15,7 +15,36 @@ const FilterSelect = styled.select`
   font-size: 16px;
 `;
 
-const FilterOptions = ({ options, selectedOption, onSelectChange }) => {
+const FilterInput = styled.input`
+  padding: 8px;
+  font-size: 16px;
+`;
+
+const FilterButton = styled.button`
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const FilterOptions = ({ options, selectedOption, onSelectChange, onSubmit }) => {
+  const [customValue, setCustomValue] = useState('');
+
+  const handleInputChange = event => {
+    setCustomValue(event.target.value);
+  };
+
+  const handleButtonClick = () => {
+    onSubmit(customValue);
+  };
+
   return (
     <FilterContainer>
       <FilterLabel>Filter by:</FilterLabel>
@@ -26,6 +55,8 @@ const FilterOptions = ({ options, selectedOption, onSelectChange }) => {
           </option>
         ))}
       </FilterSelect>
+      <FilterInput type="text" value={customValue} onChange={handleInputChange} />
+      <FilterButton onClick={handleButtonClick}>Apply</FilterButton>
     </FilterContainer>
   );
 };

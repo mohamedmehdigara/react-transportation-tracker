@@ -1,11 +1,14 @@
 // RealTimeTracker.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Map from './Map';
 import StopInfo from './StopInfo';
 import Sidebar from './Sidebar';
 import DelayChart from './DelayChart';
 import ToggleView from './ToggleView';
+import SearchBar from './SearchBar'; // Import SearchBar component here
+import Filters from './Filters';
+import Notification from './Notification';
 
 // Mock data for demonstration
 const mockStops = [
@@ -22,6 +25,7 @@ const RealTimeTracker = () => {
   const [stops, setStops] = useState(mockStops);
   const [selectedStop, setSelectedStop] = useState(null);
   const [view, setView] = useState('map'); // Default view is map
+  const [notification, setNotification] = useState(null);
 
   // Function to handle stop selection
   const handleSelectStop = stop => {
@@ -31,6 +35,29 @@ const RealTimeTracker = () => {
   // Function to handle view change
   const handleViewChange = selectedView => {
     setView(selectedView);
+  };
+
+  // Function to handle search
+  const handleSearch = searchTerm => {
+    // Logic to filter stops based on search term
+    const filteredStops = mockStops.filter(stop =>
+      stop.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setStops(filteredStops);
+  };
+
+  // Function to handle filtering by delay
+  const handleFilter = delayFilter => {
+    // Logic to filter stops based on delay
+    let filteredStops = [...mockStops];
+    if (delayFilter === 'short') {
+      filteredStops = filteredStops.filter(stop => stop.delay <= 5);
+    } else if (delayFilter === 'medium') {
+      filteredStops = filteredStops.filter(stop => stop.delay > 5 && stop.delay <= 15);
+    } else if (delayFilter === 'long') {
+      filteredStops = filteredStops.filter(stop => stop.delay > 15);
+    }
+    setStops(filteredStops);
   };
 
   return (
@@ -46,7 +73,10 @@ const RealTimeTracker = () => {
       )}
       <div>
         <ToggleView onViewChange={handleViewChange} />
+        <SearchBar onSearch={handleSearch} /> {/* Integrate SearchBar component here */}
+        <Filters onFilter={handleFilter} />
         <DelayChart stops={stops} />
+        {notification && <Notification message={notification} />}
         {selectedStop && <StopInfo stop={selectedStop} />}
       </div>
     </Container>
