@@ -2,10 +2,10 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import styled from 'styled-components';
-import { Chart, CategoryScale, LinearScale, BarController, BarElement } from 'chart.js';
+import { Chart, CategoryScale, LinearScale, BarController, BarElement, Tooltip } from 'chart.js';
 
 // Register required chart.js components
-Chart.register(CategoryScale, LinearScale, BarController, BarElement);
+Chart.register(CategoryScale, LinearScale, BarController, BarElement, Tooltip);
 
 const ChartContainer = styled.div`
   margin-top: 20px;
@@ -35,18 +35,42 @@ const DelayChart = ({ stops }) => {
     scales: {
       x: {
         type: 'category', // Specify the scale type for x-axis
+        title: {
+          display: true,
+          text: 'Stops',
+          font: {
+            weight: 'bold'
+          }
+        }
       },
       y: {
         type: 'linear', // Specify the scale type for y-axis
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Delay (min)',
+          font: {
+            weight: 'bold'
+          }
+        }
       },
     },
+    plugins: {
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+      }
+    }
   };
 
   return (
     <ChartContainer>
       <h2>Delay Distribution</h2>
-      <Bar data={chartData} options={chartOptions} />
+      {stops.length > 0 ? (
+        <Bar data={chartData} options={chartOptions} />
+      ) : (
+        <p>No data available for chart</p>
+      )}
     </ChartContainer>
   );
 };
