@@ -6,9 +6,10 @@ import StopInfo from './StopInfo';
 import Sidebar from './Sidebar';
 import DelayChart from './DelayChart';
 import ToggleView from './ToggleView';
-import SearchBar from './SearchBar'; // Import SearchBar component here
+import SearchBar from './SearchBar';
 import Filters from './Filters';
 import Notification from './Notification';
+import RouteInfo from './RouteInfo'; // Import RouteInfo component here
 
 // Mock data for demonstration
 const mockStops = [
@@ -16,6 +17,18 @@ const mockStops = [
   { id: 2, name: 'Stop 2', delay: 2, latitude: 34.1, longitude: 9.1 },
   { id: 3, name: 'Stop 3', delay: 5, latitude: 34.2, longitude: 9.2 },
 ];
+
+const mockRoute = {
+  name: 'Route A',
+  stops: [
+    { id: 1, name: 'Stop A1' },
+    { id: 2, name: 'Stop A2' },
+    { id: 3, name: 'Stop A3' },
+  ],
+  alerts: [
+    { id: 1, message: 'Route detour due to construction' }
+  ]
+};
 
 const Container = styled.div`
   display: flex;
@@ -73,11 +86,12 @@ const RealTimeTracker = () => {
       )}
       <div>
         <ToggleView onViewChange={handleViewChange} />
-        <SearchBar onSearch={handleSearch} /> {/* Integrate SearchBar component here */}
+        <SearchBar onSearch={handleSearch} />
         <Filters onFilter={handleFilter} />
         <DelayChart stops={stops} />
         {notification && <Notification message={notification} />}
         {selectedStop && <StopInfo stop={selectedStop} />}
+        <RouteInfo route={mockRoute} /> {/* Render RouteInfo component here */}
       </div>
     </Container>
   );
